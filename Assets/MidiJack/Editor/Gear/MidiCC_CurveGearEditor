@@ -1,0 +1,100 @@
+// MidiJack - MIDI Input Plugin for Unity
+//
+// Copyright (C) 2013-2015 Keijiro Takahashi
+//
+// MidiCC_CurverGear by Massimiliano Mitch - October 2015
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+using UnityEngine;
+using UnityEditor;
+using System.Collections;
+
+namespace MidiJack {
+	
+	[CustomEditor(typeof(MidiCC_CurveGear)), CanEditMultipleObjects]
+	public class MidiCC_CurveGearEditor : Editor
+	{
+		SerializedProperty propKnobNumber;
+		SerializedProperty propOptionType;
+		SerializedProperty propCurve;
+		SerializedProperty propOrigin;
+		SerializedProperty propDirection;
+		
+		SerializedProperty propBoolTarget;
+		SerializedProperty propIntTarget;
+		SerializedProperty propFloatTarget;
+		SerializedProperty propVectorTarget;
+		
+		GUIContent labelTarget;
+		
+		void OnEnable()
+		{
+			propKnobNumber   = serializedObject.FindProperty("knobNumber");
+			propOptionType   = serializedObject.FindProperty("optionType");
+			propCurve        = serializedObject.FindProperty("curve");
+			propOrigin       = serializedObject.FindProperty("origin");
+			propDirection    = serializedObject.FindProperty("direction");
+			
+			propBoolTarget   = serializedObject.FindProperty("boolTarget");
+			propIntTarget    = serializedObject.FindProperty("intTarget");
+			propFloatTarget  = serializedObject.FindProperty("floatTarget");
+			propVectorTarget = serializedObject.FindProperty("vectorTarget");
+			
+			labelTarget = new GUIContent("Target");
+		}
+		
+		public override void OnInspectorGUI()
+		{
+			serializedObject.Update ();
+			
+			EditorGUILayout.PropertyField(propKnobNumber);
+			EditorGUILayout.PropertyField(propOptionType);
+			EditorGUILayout.PropertyField(propCurve);
+			
+			if (propOptionType.hasMultipleDifferentValues ||
+			    propOptionType.intValue == (int)MidiCC_CurveGear.OptionType.Bool)
+			{
+				EditorGUILayout.PropertyField(propBoolTarget, labelTarget);
+			}
+			
+			if (propOptionType.hasMultipleDifferentValues ||
+			    propOptionType.intValue == (int)MidiCC_CurveGear.OptionType.Int)
+			{
+				EditorGUILayout.PropertyField(propIntTarget, labelTarget);
+			}
+			
+			if (propOptionType.hasMultipleDifferentValues ||
+			    propOptionType.intValue == (int)MidiCC_CurveGear.OptionType.Float)
+			{
+				EditorGUILayout.PropertyField(propFloatTarget, labelTarget);
+			}
+			
+			if (propOptionType.hasMultipleDifferentValues ||
+			    propOptionType.intValue == (int)MidiCC_CurveGear.OptionType.Vector)
+			{
+				EditorGUILayout.PropertyField(propOrigin);
+				EditorGUILayout.PropertyField(propDirection);
+				EditorGUILayout.PropertyField(propVectorTarget, labelTarget);
+			}
+			
+			serializedObject.ApplyModifiedProperties ();
+		}
+	}
+	
+} // namespace MidiJack
