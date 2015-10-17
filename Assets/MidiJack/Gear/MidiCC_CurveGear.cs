@@ -28,7 +28,7 @@ using MidiJack;
 
 namespace MidiJack {
 	
-	[AddComponentMenu("MidiJack/CC/Midi Curve Gear")]
+	[AddComponentMenu("MidiJack/Gear/MidiCC Curve Gear")]
 	public class MidiCC_CurveGear : MonoBehaviour
 	{
 		public int knobNumber;
